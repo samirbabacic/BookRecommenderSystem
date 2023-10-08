@@ -8,5 +8,6 @@ namespace BookRecommenderSystem.Entities
         public int UserProvisionnedId { get; set; }
         public string BookProvisionnedId { get; set; }
         public int Rating { get; set; }
+        public string Description { get; set; }
     }
 }

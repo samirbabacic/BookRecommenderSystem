@@ -16,6 +16,11 @@ namespace BookRecommenderSystem.Controllers
             _bookService = bookService;
         }
 
+        /// <summary>
+        /// Use to get ratings.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet(Name = "GetBook")]
         public BookDTO Get(string id)
         {

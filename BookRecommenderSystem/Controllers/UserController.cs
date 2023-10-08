@@ -25,7 +25,7 @@ namespace BookRecommenderSystem.Controllers
         [HttpPost("RateBook")]
         public async Task<UserDTO> RateBook([FromBody] RateBookRequest request)
         {
-            return await _userService.RateBook(request.UserId, request.BookId, request.Rating);
+            return await _userService.RateBook(request.UserId, request.BookId, request.Rating, request.Description);
         }
 
         [HttpPost("OrderBook")]

@@ -9,7 +9,7 @@ namespace BookRecommenderSystem.Services
     {
         UserDTO GetUser(int provisionId, string password);
         Task<UserDTO> GetAsync(string id);
-        Task<UserDTO> RateBook(string userId, string bookId, int rating);
+        Task<UserDTO> RateBook(string userId, string bookId, int rating, string description);
         Task<UserDTO> OrderBook(string userId, string bookId);
     }
 
@@ -98,7 +98,7 @@ namespace BookRecommenderSystem.Services
             return await GetAsync(userId);
         }
 
-        public async Task<UserDTO> RateBook(string userId, string bookId, int rating)
+        public async Task<UserDTO> RateBook(string userId, string bookId, int rating, string description)
         {
             var user = await _userRepository.GetByIdAsync(userId);
 
@@ -115,7 +115,8 @@ namespace BookRecommenderSystem.Services
                 {
                     BookProvisionnedId = bookToBeRated.ProvisionId,
                     UserProvisionnedId = user.ProvisionId,
-                    Rating = rating
+                    Rating = rating,
+                    Description = description
                 });
 
                 return await GetAsync(userId);
@@ -125,7 +126,8 @@ namespace BookRecommenderSystem.Services
             {
                 BookProvisionnedId = bookToBeRated.ProvisionId,
                 UserProvisionnedId = user.ProvisionId,
-                Rating = rating
+                Rating = rating,
+                Description = description
             });
 
             return await GetAsync(userId);

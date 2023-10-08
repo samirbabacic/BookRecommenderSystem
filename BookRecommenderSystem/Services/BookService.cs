@@ -13,10 +13,12 @@ namespace BookRecommenderSystem.Services
     public class BookService : IBookService
     {
         private readonly IRepository<Book> _bookRepository;
+        private readonly IRepository<BookRating> _bookRatingRepository;
 
-        public BookService(IRepository<Book> bookRepository)
+        public BookService(IRepository<Book> bookRepository, IRepository<BookRating> bookRatingRepository)
         {
             _bookRepository = bookRepository;
+            _bookRatingRepository = bookRatingRepository;
         }
 
         public List<BookDTO> GetBooks(int pageNumber, int pageSize)
@@ -37,7 +39,19 @@ namespace BookRecommenderSystem.Services
         {
             var book = _bookRepository.FirstOrDefault(x => x.Id == bookId);
 
-            return new BookDTO(book);
+            var bookRatings = _bookRatingRepository.Get(x => x.BookProvisionnedId == book.ProvisionId);
+
+            var bookRatingsDtos = bookRatings.Select(x => new BookDTO.BookRatedValueDTO
+            {
+                Description = x.Description,
+                UserProvisionId = x.UserProvisionnedId,
+                Rating = x.Rating,
+            }).ToList();
+
+            return new BookDTO(book)
+            {
+                Ratings = bookRatingsDtos
+            };
         }
     }
 }
