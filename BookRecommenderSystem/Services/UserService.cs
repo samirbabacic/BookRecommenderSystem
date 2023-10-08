@@ -7,6 +7,7 @@ namespace BookRecommenderSystem.Services
 {
     public interface IUserService
     {
+        UserDTO GetUser(int provisionId, string password);
         Task<UserDTO> GetAsync(string id);
         Task<UserDTO> RateBook(string userId, string bookId, int rating);
         Task<UserDTO> OrderBook(string userId, string bookId);
@@ -28,7 +29,11 @@ namespace BookRecommenderSystem.Services
         public async Task<UserDTO> GetAsync(string id)
         {
             var user = await _userRepository.GetByIdAsync(id);
+            return GetUser(user);
+        }
 
+        private UserDTO GetUser(User user)
+        {
             var booksOrdered = _bookRepository.Get(x => user.OrderedBooksIds.Contains(x.Id));
             var recommendedBooks = _bookRepository.Get(x => user.RecommendedBooksIds.Contains(x.Id));
 
@@ -71,6 +76,13 @@ namespace BookRecommenderSystem.Services
                 OrderedBooks = booksOrderedDtos,
                 RecommendedBooks = recommendedBooksDtos,
             };
+        }
+
+        public UserDTO GetUser(int provisionId, string password)
+        {
+            var user = _userRepository.FirstOrDefault(x => x.ProvisionId == provisionId && x.Password == password);
+
+            return GetUser(user);
         }
 
         public async Task<UserDTO> OrderBook(string userId, string bookId)
